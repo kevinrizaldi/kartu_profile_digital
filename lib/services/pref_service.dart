@@ -5,6 +5,8 @@ class PrefService {
   PrefService._(this._prefs);
   final SharedPreferences _prefs;
 
+  Set<String> get debugKeys => _prefs.getKeys();
+
   static const _kProfile = 'profile_data';
 
   // ---------- Profil ----------

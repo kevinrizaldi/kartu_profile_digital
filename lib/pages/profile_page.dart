@@ -43,6 +43,15 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Future<void> _reset() async {
+    await widget.prefs.clearProfile();
+    if (!mounted) return;
+    setState(() => _profile = widget.prefs.profile);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Profil dikembalikan ke bawaan')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -92,6 +101,12 @@ class _ProfilePageState extends State<ProfilePage> {
             onChanged: widget.onThemeChanged,
           ),
           // Lab 11 akan menambahkan menu "Proyek Saya" di sini.
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: _reset,
+            icon: const Icon(Icons.restore),
+            label: const Text('Reset Profil'),
+          ),
           const SizedBox(height: 24),
           Center(
             child: Text(
