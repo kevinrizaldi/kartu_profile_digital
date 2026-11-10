@@ -4,12 +4,12 @@ import 'package:kartu_profil_digital/main.dart';
 import 'package:kartu_profil_digital/services/pref_service.dart';
 
 void main() {
-  testWidgets('Profile smoke test', (WidgetTester tester) async {
+  testWidgets('Project list smoke test', (WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await PrefService.init();
 
     await tester.pumpWidget(MyApp(prefs: prefs));
 
-    expect(find.text('Kartu Profil Digital'), findsOneWidget);
+    expect(find.text('Proyek Saya'), findsOneWidget);
   });
 }
