@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// ignore: unused_import
 import 'pages/profile_page.dart';
-import 'pages/project_list_page.dart';
 import 'services/pref_service.dart';
 
 void main() async {
@@ -25,7 +23,6 @@ class _MyAppState extends State<MyApp> {
   late final ValueNotifier<bool> _isDark =
       ValueNotifier(widget.prefs.isDarkMode);
 
-  // ignore: unused_element
   void _changeTheme(bool value) {
     _isDark.value = value;            // 1. ubah tampilan sekarang
     widget.prefs.setDarkMode(value);  // 2. simpan untuk nanti
@@ -51,7 +48,11 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.dark,
           ),
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          home: const ProjectListPage(),
+          home: ProfilePage(
+            prefs: widget.prefs,
+            isDark: isDark,
+            onThemeChanged: _changeTheme,
+          ),
         );
       },
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../data/project_repository.dart';
 import '../models/profile_data.dart';
 import '../services/pref_service.dart';
 import 'edit_profile_page.dart';
+import 'project_list_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({
@@ -21,6 +23,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileData _profile;
+  final _projectRepo = ProjectRepository();
+  late Future<int> _countFuture = _projectRepo.count();
 
   @override
   void initState() {
@@ -50,6 +54,18 @@ class _ProfilePageState extends State<ProfilePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Profil dikembalikan ke bawaan')),
     );
+  }
+
+  Future<void> _openProjects() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ProjectListPage()),
+    );
+    if (!mounted) return;
+    // Kembali dari daftar proyek → segarkan jumlah
+    setState(() {
+      _countFuture = _projectRepo.count();
+    });
   }
 
   @override
@@ -100,7 +116,17 @@ class _ProfilePageState extends State<ProfilePage> {
             value: widget.isDark,
             onChanged: widget.onThemeChanged,
           ),
-          // Lab 11 akan menambahkan menu "Proyek Saya" di sini.
+          ListTile(
+            leading: const Icon(Icons.folder_open),
+            title: const Text('Proyek Saya'),
+            subtitle: FutureBuilder<int>(
+              future: _countFuture,
+              builder: (context, snapshot) =>
+                  Text('${snapshot.data ?? 0} proyek'),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: _openProjects,
+          ),
           const SizedBox(height: 16),
           OutlinedButton.icon(
             onPressed: _reset,
